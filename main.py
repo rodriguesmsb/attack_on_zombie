@@ -9,7 +9,7 @@ Created on Thu Apr 15 2021
 ## Import necessary libraries
 import pygame
 from pygame.locals import *
-from characters import hero
+from characters import hero, male_zombie
 
 #initialize pygame
 pygame.init()
@@ -36,6 +36,7 @@ background = pygame.image.load("img/graveyard/bg.png")
 
 #create characters
 knight = hero(x = 200, y = 200, scale = 8)
+male_zombie = male_zombie(x = 150, y = 50, scale = 6)
 
 
 def draw_grid():
@@ -48,10 +49,10 @@ run = True
 
 
 
-
 while run:
     screen.blit(source = background, dest = (0,0))
     screen.blit(source = knight.image, dest = knight.rect)
+    screen.blit(source = male_zombie.image, dest = male_zombie.rect)
     draw_grid()
 
     #add a way to close the game
