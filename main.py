@@ -51,8 +51,8 @@ run = True
 
 while run:
     screen.blit(source = background, dest = (0,0))
-    screen.blit(source = knight.image, dest = knight.rect)
-    screen.blit(source = male_zombie.image, dest = male_zombie.rect)
+    knight.draw(screen = screen)
+    male_zombie.draw(screen = screen)
     draw_grid()
 
     #add a way to close the game

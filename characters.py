@@ -22,6 +22,10 @@ class hero(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (self.x ,self.y)
 
+    def draw(self, screen):
+        screen.blit(source = self.image, dest = self.rect)
+
+
 class male_zombie(pygame.sprite.Sprite):
     def __init__(self,x,y, scale):
         pygame.sprite.Sprite.__init__(self)
@@ -32,6 +36,9 @@ class male_zombie(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(img, (img.get_width() // self.scale , img.get_height() // self.scale))
         self.rect = self.image.get_rect()
         self.rect.center = (self.x ,self.y)
+
+    def draw(self, screen):
+        screen.blit(source = self.image, dest = self.rect)
 
 
 
