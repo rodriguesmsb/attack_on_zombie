@@ -35,7 +35,7 @@ pygame.display.set_caption("Attack on Zombies")
 background = pygame.image.load("img/graveyard/bg.png")
 
 #create characters
-knight = hero(x = 200, y = 200, scale = 8)
+knight = hero(x = 100, y = screen_height - 130, scale = 8)
 male_zombie = male_zombie(x = 150, y = 50, scale = 6)
 
 
@@ -51,14 +51,20 @@ run = True
 
 while run:
     screen.blit(source = background, dest = (0,0))
-    knight.draw(screen = screen)
-    male_zombie.draw(screen = screen)
     draw_grid()
+
+    knight.update_player_position(screen = screen, 
+                                  screen_width = screen_width, 
+                                  screen_height = screen_height)
 
     #add a way to close the game
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                run = False
+
     
     #update the screen
     pygame.display.update()
