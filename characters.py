@@ -58,7 +58,7 @@ class hero(pygame.sprite.Sprite):
     
     def update_player_position(self, screen, screen_width, screen_height):
         dx = 0
-        dy = 0
+    
         walk_speed = 5
 
         #draw a rect around char
@@ -96,7 +96,7 @@ class hero(pygame.sprite.Sprite):
 
         #update player coordinate
         self.rect.x += dx
-        self.rect.y += dy
+        
         
         #draw player on screen
         screen.blit(source = self.hero, dest = self.rect)
@@ -104,13 +104,14 @@ class hero(pygame.sprite.Sprite):
         
 
 class male_zombie(pygame.sprite.Sprite):
-    def __init__(self, x, y, scale):
+    def __init__(self, x, y, scale, speed):
         pygame.sprite.Sprite.__init__(self)
         
         #variables assigments
         self.scale = scale
         self.x = x
         self.y = y
+        self.speed = speed
 
         #create a blank list to store images
         self.images_right = []
@@ -153,12 +154,22 @@ class male_zombie(pygame.sprite.Sprite):
         #update image depending on index
         self.images  = self.images_right[self.index]
 
+        dx = 0
+    
+
         #check if enough time is passed since last update
         if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
             self.update_time = pygame.time.get_ticks()
             self.index += 1
+            
             if self.index >= len(self.images_right):
                 self.index = 0
+            dx += self.speed
+        
+            
+        #update player coordinate
+        self.rect.x += dx
+
         
         screen.blit(source = self.images, dest = self.rect)
 
