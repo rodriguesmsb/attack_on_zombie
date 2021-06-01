@@ -103,22 +103,45 @@ class hero(pygame.sprite.Sprite):
 
         
 
-    
-
-
 class male_zombie(pygame.sprite.Sprite):
     def __init__(self,x,y, scale):
         pygame.sprite.Sprite.__init__(self)
+        
+        #variables assigments
+        self.scale = scale
         self.x = x
         self.y = y
-        self.scale = scale
-        img = pygame.image.load("img/zombie/male/Walk (1).png")
-        self.image = pygame.transform.scale(img, (img.get_width() // self.scale , img.get_height() // self.scale))
-        self.rect = self.image.get_rect()
-        self.rect.center = (self.x ,self.y)
 
-    def draw(self, screen):
-        screen.blit(source = self.image, dest = self.rect)
+        #create a blank list to store images
+        self.images_right = []
+        self.images_left = []
+
+        #create inde to iterate over images
+        self.index = 0
+        self.counter = 0
+        for num in range(1,11):
+            img_path = "img/zombie/male/Walk (" + str(num) + ").png"
+            
+            img_right = pygame.image.load(img_path)
+
+            char_right = pygame.transform.scale(img_right,(img_right.get_width() // self.scale , 
+                                                             img_right.get_height() // self.scale))
+
+            #flip image 
+            char_left = pygame.transform.flip(char_right, True, False)
+
+            self.images_right.append(char_right)
+            self.images_left.append(char_left)
+
+        #get images from list to display on screen
+        self.zombie = self.images_right[self.index]
+        self.rect = self.zombie.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y
+        self.width = self.zombie.get_width()
+        self.height = self.zombie.get_height()
+        self.direction = "right"
+
 
 
 
