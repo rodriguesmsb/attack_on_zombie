@@ -104,7 +104,7 @@ class hero(pygame.sprite.Sprite):
         
 
 class male_zombie(pygame.sprite.Sprite):
-    def __init__(self,x,y, scale):
+    def __init__(self, x, y, scale):
         pygame.sprite.Sprite.__init__(self)
         
         #variables assigments
@@ -116,9 +116,12 @@ class male_zombie(pygame.sprite.Sprite):
         self.images_right = []
         self.images_left = []
 
-        #create inde to iterate over images
+        #create index to iterate over images
         self.index = 0
-        self.counter = 0
+
+        #creater a timer to using during animation
+        self.update_time = pygame.time.get_ticks()
+
         for num in range(1,11):
             img_path = "img/zombie/male/Walk (" + str(num) + ").png"
             
@@ -141,6 +144,29 @@ class male_zombie(pygame.sprite.Sprite):
         self.width = self.zombie.get_width()
         self.height = self.zombie.get_height()
         self.direction = "right"
+    
+    def update_animation(self, screen, screen_width, screen_height):
+
+        #define a timer
+        ANIMATION_COOLDOWN = 100
+
+        #update image depending on index
+        self.images  = self.images_right[self.index]
+
+        #check if enough time is passed since last update
+        if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
+            self.update_time = pygame.time.get_ticks()
+            self.index += 1
+            if self.index >= len(self.images_right):
+                self.index = 0
+        
+        screen.blit(source = self.images, dest = self.rect)
+
+            
+
+
+
+
 
 
 

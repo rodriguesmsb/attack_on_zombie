@@ -36,7 +36,7 @@ background = pygame.image.load("img/graveyard/bg.png")
 
 #create characters
 knight = hero(x = 100, y = screen_height - 130, scale = 8)
-male_zombie = male_zombie(x = 150, y = 50, scale = 6)
+zombie = male_zombie(x = 150, y = 50, scale = 6)
 
 
 def draw_grid():
@@ -56,6 +56,10 @@ while run:
     knight.update_player_position(screen = screen, 
                                   screen_width = screen_width, 
                                   screen_height = screen_height)
+
+    zombie.update_animation(screen = screen, 
+                            screen_width = screen_width, 
+                            screen_height = screen_height)
 
     #add a way to close the game
     for event in pygame.event.get():
