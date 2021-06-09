@@ -103,8 +103,8 @@ class hero(pygame.sprite.Sprite):
 
         
 
-class male_zombie(pygame.sprite.Sprite):
-    def __init__(self, x, y, scale, speed):
+class zombie(pygame.sprite.Sprite):
+    def __init__(self, x, y, scale, speed, gender):
         pygame.sprite.Sprite.__init__(self)
         
         #variables assigments
@@ -123,8 +123,17 @@ class male_zombie(pygame.sprite.Sprite):
         #creater a timer to using during animation
         self.update_time = pygame.time.get_ticks()
 
+        if gender == "M":
+            zombie_path = "img/zombie/male/Walk ("
+        elif gender == "F":
+            zombie_path = "img/zombie/female/Walk ("
+
+
+
+
+
         for num in range(1,11):
-            img_path = "img/zombie/male/Walk (" + str(num) + ").png"
+            img_path =  zombie_path + str(num) + ").png"
             
             img_right = pygame.image.load(img_path)
 
