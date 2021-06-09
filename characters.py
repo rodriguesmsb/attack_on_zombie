@@ -27,10 +27,42 @@ class hero(pygame.sprite.Sprite):
         #create inde to iterate over images
         self.index = 0
         self.counter = 0
+
+        #create a action count
+        self.action = 0
     
+        #create a temporary emptu list
+        temp_list_right = []
+        temp_list_left = []
 
         #load image
-        #load the images
+
+        #load the images for standing
+        for num in range(1,11):
+            img_path = "img/knight/Idle (" + str(num) + ").png"
+            
+            img_right = pygame.image.load(img_path)
+
+            player_right = pygame.transform.scale(img_right,(img_right.get_width() // self.scale , 
+                                                             img_right.get_height() // self.scale))
+
+            #flip image 
+            player_left = pygame.transform.flip(player_right, True, False)
+            
+            #add images to temp list
+            temp_list_right.append(player_right)
+            temp_list_left.append(player_left)
+
+        #add temp list to animation list
+        self.images_right.append(temp_list_right)
+        self.images_left.append(temp_list_left)
+
+
+        #create a temporary empty list
+        temp_list_right = []
+        temp_list_left = []
+
+        #load the images for run
         for num in range(1,11):
             img_path = "img/knight/Walk (" + str(num) + ").png"
             
@@ -42,11 +74,18 @@ class hero(pygame.sprite.Sprite):
             #flip image 
             player_left = pygame.transform.flip(player_right, True, False)
 
-            self.images_right.append(player_right)
-            self.images_left.append(player_left)
+            #add images to temp list
+            temp_list_right.append(player_right)
+            temp_list_left.append(player_left)
+
+            
+
+        #add temp list to animation list
+        self.images_right.append(temp_list_right)
+        self.images_left.append(temp_list_left)
 
         #get images from list to display on screen
-        self.hero = self.images_right[self.index]
+        self.hero = self.images_right[self.action][self.index]
         self.rect = self.hero.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
@@ -68,6 +107,8 @@ class hero(pygame.sprite.Sprite):
         #get key press
         key = pygame.key.get_pressed()
 
+
+            
         #Add left move
         if key[pygame.K_LEFT]:
             dx -= 5
@@ -78,22 +119,29 @@ class hero(pygame.sprite.Sprite):
             dx += 5
             self.direction = "right"
 
+
         #add code to star animation only if key is pressed
         if key[pygame.K_RIGHT] or key[pygame.K_LEFT]:
+            self.action = 1
             self.counter += 1
+        else:
+            self.action = 0
+            
         
-        #Add animation during the move
-        if self.counter > walk_speed:
-            self.counter = 0
-            self.index += 1
-            if self.index >= len(self.images_right):
-                self.index = 0
-            if self.direction == "right":
-                self.hero = self.images_right[self.index]
+        if self.action == 1:
+            #Add animation during the move
+            if self.counter > walk_speed:
+                self.counter = 0
+                self.index += 1
+                if self.index >= len(self.images_right[self.action]):
+                    self.index = 0
+                if self.direction == "right":
+                    self.hero = self.images_right[self.action][self.index]
+                if self.direction == "left":
+                    self.hero = self.images_left[self.action][self.index]
 
-            if self.direction == "left":
-                self.hero = self.images_left[self.index]
-
+        if self.action == 0:
+            pass
         #update player coordinate
         self.rect.x += dx
         
@@ -112,6 +160,7 @@ class zombie(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.speed = speed
+        self.action = 0
 
         #create a blank list to store images
         self.images_right = []
@@ -127,9 +176,6 @@ class zombie(pygame.sprite.Sprite):
             zombie_path = "img/zombie/male/Walk ("
         elif gender == "F":
             zombie_path = "img/zombie/female/Walk ("
-
-
-
 
 
         for num in range(1,11):
@@ -154,6 +200,14 @@ class zombie(pygame.sprite.Sprite):
         self.width = self.zombie.get_width()
         self.height = self.zombie.get_height()
         self.direction = "right"
+
+    def update_action(self, new_action):
+        #check if the new action is different to the previous one
+        if new_acton != self.action:
+            self.action = new_action
+            #update the animation settings
+            self.index = 0
+            self.update_time = pygame.time.get_ticks()
     
     def update_animation(self, screen, screen_width, screen_height):
 
@@ -181,6 +235,8 @@ class zombie(pygame.sprite.Sprite):
 
         
         screen.blit(source = self.images, dest = self.rect)
+
+    
 
             
 
