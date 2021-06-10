@@ -28,6 +28,9 @@ class hero(pygame.sprite.Sprite):
         self.index = 0
         self.counter = 0
 
+        #creater a timer to using during animation
+        self.update_time = pygame.time.get_ticks()
+
         #create a action count
         self.action = 0
     
@@ -92,7 +95,18 @@ class hero(pygame.sprite.Sprite):
         self.width = self.hero.get_width()
         self.height = self.hero.get_height()
         self.direction = "right"
-        
+    
+
+
+    def update_action(self, new_action):
+
+        #check if the new action is different to the previous one
+        if new_action != self.action:
+            self.action = new_action
+
+            #update the animation settings
+            self.index = 0
+            
         
     
     def update_player_position(self, screen, screen_width, screen_height):
@@ -102,6 +116,26 @@ class hero(pygame.sprite.Sprite):
 
         #draw a rect around char
         pygame.draw.rect(screen, (255,255,0), self.rect, 2)
+
+        if self.action == 0:
+
+            #define a timer
+            ANIMATION_COOLDOWN = 300
+
+            #update image depending on index
+            if self.direction == "right":
+                self.hero = self.images_right[self.action][self.index]
+            if self.direction == "left":
+                self.hero = self.images_left[self.action][self.index]
+           
+
+            #check if enough time is passed since last update
+            if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
+                self.update_time = pygame.time.get_ticks()
+                self.index += 1
+            
+            if self.index >= len(self.images_right):
+                self.index = 0
 
     
         #get key press
@@ -122,10 +156,10 @@ class hero(pygame.sprite.Sprite):
 
         #add code to star animation only if key is pressed
         if key[pygame.K_RIGHT] or key[pygame.K_LEFT]:
-            self.action = 1
+            self.update_action(1)
             self.counter += 1
         else:
-            self.action = 0
+            self.update_action(0)
             
         
         if self.action == 1:
@@ -140,8 +174,7 @@ class hero(pygame.sprite.Sprite):
                 if self.direction == "left":
                     self.hero = self.images_left[self.action][self.index]
 
-        if self.action == 0:
-            pass
+            
         #update player coordinate
         self.rect.x += dx
         
@@ -201,13 +234,6 @@ class zombie(pygame.sprite.Sprite):
         self.height = self.zombie.get_height()
         self.direction = "right"
 
-    def update_action(self, new_action):
-        #check if the new action is different to the previous one
-        if new_acton != self.action:
-            self.action = new_action
-            #update the animation settings
-            self.index = 0
-            self.update_time = pygame.time.get_ticks()
     
     def update_animation(self, screen, screen_width, screen_height):
 
