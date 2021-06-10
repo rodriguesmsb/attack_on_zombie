@@ -53,6 +53,7 @@ while run:
     screen.blit(source = background, dest = (0,0))
     draw_grid()
 
+    
     knight.update_player_position(screen = screen, 
                                   screen_width = screen_width, 
                                   screen_height = screen_height)

@@ -16,9 +16,15 @@ class hero(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         #variables assigments
+        self.alive = True
         self.scale = scale
         self.x = x
         self.y = y
+
+        #jump variables
+        self.jump = False
+        self.in_air = False
+        self.jump_vel = 0
 
         #create a blank list to store images
         self.images_right = []
@@ -81,6 +87,22 @@ class hero(pygame.sprite.Sprite):
             temp_list_right.append(player_right)
             temp_list_left.append(player_left)
 
+        #load images for jump
+        for num in range(1,11):
+            img_path = "img/knight/Jump (" + str(num) + ").png"
+            
+            img_right = pygame.image.load(img_path)
+
+            player_right = pygame.transform.scale(img_right,(img_right.get_width() // self.scale , 
+                                                             img_right.get_height() // self.scale))
+
+            #flip image 
+            player_left = pygame.transform.flip(player_right, True, False)
+
+            #add images to temp list
+            temp_list_right.append(player_right)
+            temp_list_left.append(player_left)
+
             
 
         #add temp list to animation list
@@ -111,72 +133,92 @@ class hero(pygame.sprite.Sprite):
     
     def update_player_position(self, screen, screen_width, screen_height):
         dx = 0
+        dy = 0
     
         walk_speed = 5
 
         #draw a rect around char
         pygame.draw.rect(screen, (255,255,0), self.rect, 2)
 
-        if self.action == 0:
 
-            #define a timer
-            ANIMATION_COOLDOWN = 300
+        if self.alive:
 
-            #update image depending on index
-            if self.direction == "right":
-                self.hero = self.images_right[self.action][self.index]
-            if self.direction == "left":
-                self.hero = self.images_left[self.action][self.index]
-           
+            if self.action == 0:
 
-            #check if enough time is passed since last update
-            if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
-                self.update_time = pygame.time.get_ticks()
-                self.index += 1
-            
-            if self.index >= len(self.images_right):
-                self.index = 0
+                #define a timer
+                ANIMATION_COOLDOWN = 300
 
-    
-        #get key press
-        key = pygame.key.get_pressed()
-
-
-            
-        #Add left move
-        if key[pygame.K_LEFT]:
-            dx -= 5
-            self.direction = "left"
-
-        if key[pygame.K_RIGHT]:
-            #change character position
-            dx += 5
-            self.direction = "right"
-
-
-        #add code to star animation only if key is pressed
-        if key[pygame.K_RIGHT] or key[pygame.K_LEFT]:
-            self.update_action(1)
-            self.counter += 1
-        else:
-            self.update_action(0)
-            
-        
-        if self.action == 1:
-            #Add animation during the move
-            if self.counter > walk_speed:
-                self.counter = 0
-                self.index += 1
-                if self.index >= len(self.images_right[self.action]):
-                    self.index = 0
+                #update image depending on index
                 if self.direction == "right":
                     self.hero = self.images_right[self.action][self.index]
                 if self.direction == "left":
                     self.hero = self.images_left[self.action][self.index]
+                
+
+                #check if enough time is passed since last update
+                if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
+                    self.update_time = pygame.time.get_ticks()
+                    self.index += 1
+                
+                if self.index >= len(self.images_right):
+                    self.index = 0
+
+
+            #get key press
+            key = pygame.key.get_pressed()
+
+
+                
+            #Add left move
+            if key[pygame.K_LEFT]:
+                dx -= 5
+                self.direction = "left"
+
+            if key[pygame.K_RIGHT]:
+                #change character position
+                dx += 5
+                self.direction = "right"
+
+
+            #add code to star animation only if key is pressed
+            if key[pygame.K_RIGHT] or key[pygame.K_LEFT]:
+                self.update_action(1)
+                self.counter += 1
+            else:
+                self.update_action(0)
+                
+            
+            if self.action == 1:
+                #Add animation during the move
+                if self.counter > walk_speed:
+                    self.counter = 0
+                    self.index += 1
+                    if self.index >= len(self.images_right[self.action]):
+                        self.index = 0
+                    if self.direction == "right":
+                        self.hero = self.images_right[self.action][self.index]
+                    if self.direction == "left":
+                        self.hero = self.images_left[self.action][self.index]
+            
+            #control jump action
+            if key[pygame.K_SPACE] and self.jump == False and self.in_air == False:
+                self.jump_vel = -15
+                self.jump = True
+            if key[pygame.K_SPACE] == False:
+                self.jump = False
+
+        
+            ## add gravity
+            self.jump_vel += 1
+            if self.jump_vel > 10:
+                self.jump_vel = 10
+            dy += self.jump_vel
+
 
             
         #update player coordinate
         self.rect.x += dx
+        self.rect.y += dy
         
         
         #draw player on screen
