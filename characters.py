@@ -42,75 +42,30 @@ class hero(pygame.sprite.Sprite):
         #create a action count
         self.action = 0
     
-        #create a temporary emptu list
-        temp_list_right = []
-        temp_list_left = []
+        
 
-        #load image
-
-        #load the images for standing
-        for num in range(1,11):
-            img_path = "img/knight/Idle (" + str(num) + ").png"
-            
-            img_right = pygame.image.load(img_path)
-
-            player_right = pygame.transform.scale(img_right,(img_right.get_width() // self.scale , 
+        #load all imges for the player
+        animtions_types = ["Idle", "Walk", "Jump"]
+        for animation in animtions_types:
+            #create a temporary empty list
+            temp_list_right = []
+            temp_list_left = []
+            for num in range(1,11):
+                img_path = "img/knight/" + animation + " (" + str(num) + ").png"
+                img_right = pygame.image.load(img_path)
+                player_right = pygame.transform.scale(img_right,(img_right.get_width() // self.scale , 
                                                              img_right.get_height() // self.scale))
-
-            #flip image 
-            player_left = pygame.transform.flip(player_right, True, False)
+                #flip image 
+                player_left = pygame.transform.flip(player_right, True, False)
+                #add images to temp list
+                temp_list_right.append(player_right)
+                temp_list_left.append(player_left)
             
-            #add images to temp list
-            temp_list_right.append(player_right)
-            temp_list_left.append(player_left)
+            #add temp list to animation list
+            self.images_right.append(temp_list_right)
+            self.images_left.append(temp_list_left)
 
-        #add temp list to animation list
-        self.images_right.append(temp_list_right)
-        self.images_left.append(temp_list_left)
-
-
-        #create a temporary empty list
-        temp_list_right = []
-        temp_list_left = []
-
-        #load the images for run
-        for num in range(1,11):
-            img_path = "img/knight/Walk (" + str(num) + ").png"
-            
-            img_right = pygame.image.load(img_path)
-
-            player_right = pygame.transform.scale(img_right,(img_right.get_width() // self.scale , 
-                                                             img_right.get_height() // self.scale))
-
-            #flip image 
-            player_left = pygame.transform.flip(player_right, True, False)
-
-            #add images to temp list
-            temp_list_right.append(player_right)
-            temp_list_left.append(player_left)
-
-        #load images for jump
-        for num in range(1,11):
-            img_path = "img/knight/Jump (" + str(num) + ").png"
-            
-            img_right = pygame.image.load(img_path)
-
-            player_right = pygame.transform.scale(img_right,(img_right.get_width() // self.scale , 
-                                                             img_right.get_height() // self.scale))
-
-            #flip image 
-            player_left = pygame.transform.flip(player_right, True, False)
-
-            #add images to temp list
-            temp_list_right.append(player_right)
-            temp_list_left.append(player_left)
-
-            
-
-        #add temp list to animation list
-        self.images_right.append(temp_list_right)
-        self.images_left.append(temp_list_left)
-
+       
         #get images from list to display on screen
         self.hero = self.images_right[self.action][self.index]
         self.rect = self.hero.get_rect()
@@ -202,11 +157,13 @@ class hero(pygame.sprite.Sprite):
                     if self.direction == "left":
                         self.hero = self.images_left[self.action][self.index]
             
+            
             #turn on and off jump action
             if key[pygame.K_SPACE] and self.jump == False and self.in_air == False:
                 self.jump_vel = -11
                 self.jump = True
                 self.in_air = True
+                self.update_action(2)
             #stopping jum event
             if key[pygame.K_SPACE] == False:
                 self.jump = False
