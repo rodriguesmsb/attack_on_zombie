@@ -23,8 +23,10 @@ class hero(pygame.sprite.Sprite):
 
         #jump variables
         self.jump = False
-        self.in_air = False
         self.jump_vel = 0
+        self.in_air = True
+        self.gravity = 1
+    
 
         #create a blank list to store images
         self.images_right = []
@@ -200,19 +202,40 @@ class hero(pygame.sprite.Sprite):
                     if self.direction == "left":
                         self.hero = self.images_left[self.action][self.index]
             
-            #control jump action
+            #turn on and off jump action
             if key[pygame.K_SPACE] and self.jump == False and self.in_air == False:
-                self.jump_vel = -15
+                self.jump_vel = -11
                 self.jump = True
+                self.in_air = True
+            #stopping jum event
             if key[pygame.K_SPACE] == False:
                 self.jump = False
 
-        
-            ## add gravity
-            self.jump_vel += 1
+            self.jump_vel += self.gravity
             if self.jump_vel > 10:
-                self.jump_vel = 10
+                self.jump_vel = 0
             dy += self.jump_vel
+
+
+            
+            
+
+            #check colision with flor
+            if self.rect.bottom + dy > 300:
+                dy = 300 - self.rect.bottom
+                self.in_air = False
+            
+            
+            
+
+                    
+    
+          
+
+        #end self alive
+        else:
+            pass
+  
 
 
             

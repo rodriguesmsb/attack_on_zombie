@@ -10,6 +10,7 @@ Created on Thu Apr 15 2021
 import pygame
 from pygame.locals import *
 from characters import hero, zombie
+from world import World
 
 #initialize pygame
 pygame.init()
@@ -35,8 +36,8 @@ pygame.display.set_caption("Attack on Zombies")
 background = pygame.image.load("img/graveyard/bg.png")
 
 #create characters
-knight = hero(x = 100, y = screen_height - 130, scale = 8)
-zombie = zombie(x = 0, y = screen_height - 130, scale = 6, speed = 1, gender = "M")
+knight = hero(x = 100, y = screen_height - 300, scale = 8)
+zombie = zombie(x = 0, y = screen_height - 300, scale = 6, speed = 1, gender = "M")
 
 
 def draw_grid():
@@ -45,13 +46,18 @@ def draw_grid():
 		pygame.draw.line(screen, (255, 255, 255), (line * tile_size, 0), (line * tile_size, screen_height))
 
 
+
+#add world elements
+world = World(data = False,  tile_size = tile_size)
 run = True
+
 
 
 
 while run:
     screen.blit(source = background, dest = (0,0))
     draw_grid()
+    world.draw(screen = screen)
 
     
     knight.update_player_position(screen = screen, 
