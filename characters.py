@@ -9,6 +9,7 @@ Created on Thu Apr 15 2021
 ## Import necessary libraries
 import pygame
 from pygame.locals import *
+import glob as gb
 
 
 class hero(pygame.sprite.Sprite):
@@ -46,15 +47,23 @@ class hero(pygame.sprite.Sprite):
 
         #load all imges for the player
         animtions_types = ["Idle", "Walk", "Jump"]
+        #path for images
+        path = "img/knight/"
         for animation in animtions_types:
             #create a temporary empty list
             temp_list_right = []
             temp_list_left = []
-            for num in range(1,11):
-                img_path = "img/knight/" + animation + " (" + str(num) + ").png"
+
+            #count number of files in the folder
+            number_of_images = len(gb.glob(path + animation + " *"))
+            
+         
+
+            for num in range(1,number_of_images + 1):
+                img_path =  "img/knight/" + animation + " (" + str(num) + ").png"
                 img_right = pygame.image.load(img_path)
                 player_right = pygame.transform.scale(img_right,(img_right.get_width() // self.scale , 
-                                                             img_right.get_height() // self.scale))
+                                                                 img_right.get_height() // self.scale))
                 #flip image 
                 player_left = pygame.transform.flip(player_right, True, False)
                 #add images to temp list
@@ -85,6 +94,30 @@ class hero(pygame.sprite.Sprite):
 
             #update the animation settings
             self.index = 0
+            self.update_time = pygame.time.get_ticks()
+
+    def update_animation(self):
+
+        #update animation
+        #define a timer
+        ANIMATION_COOLDOWN = 300
+
+        #update image depending on index
+        if self.direction == "right":
+            self.hero = self.images_right[self.action][self.index]
+        if self.direction == "left":
+            self.hero = self.images_left[self.action][self.index]
+                
+
+        #check if enough time is passed since last update
+        if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
+            self.update_time = pygame.time.get_ticks()
+            self.index += 1
+                
+        if self.index >= len(self.images_right):
+            self.index = 0
+    
+
             
         
     
@@ -100,26 +133,17 @@ class hero(pygame.sprite.Sprite):
 
         if self.alive:
 
+            #select the correct animation
             if self.action == 0:
-
-                #define a timer
-                ANIMATION_COOLDOWN = 300
-
-                #update image depending on index
-                if self.direction == "right":
-                    self.hero = self.images_right[self.action][self.index]
-                if self.direction == "left":
-                    self.hero = self.images_left[self.action][self.index]
-                
-
-                #check if enough time is passed since last update
-                if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
-                    self.update_time = pygame.time.get_ticks()
-                    self.index += 1
-                
-                if self.index >= len(self.images_right):
-                    self.index = 0
-
+                self.update_animation()
+            if self.action == 1:
+                #Add animation during the move
+                self.update_animation()
+            if self.in_air:
+                self.update_action(2)
+                self.update_animation()
+        
+            
 
             #get key press
             key = pygame.key.get_pressed()
@@ -145,25 +169,11 @@ class hero(pygame.sprite.Sprite):
                 self.update_action(0)
                 
             
-            if self.action == 1:
-                #Add animation during the move
-                if self.counter > walk_speed:
-                    self.counter = 0
-                    self.index += 1
-                    if self.index >= len(self.images_right[self.action]):
-                        self.index = 0
-                    if self.direction == "right":
-                        self.hero = self.images_right[self.action][self.index]
-                    if self.direction == "left":
-                        self.hero = self.images_left[self.action][self.index]
-            
-            
             #turn on and off jump action
             if key[pygame.K_SPACE] and self.jump == False and self.in_air == False:
                 self.jump_vel = -11
                 self.jump = True
                 self.in_air = True
-                self.update_action(2)
             #stopping jum event
             if key[pygame.K_SPACE] == False:
                 self.jump = False
@@ -173,9 +183,6 @@ class hero(pygame.sprite.Sprite):
                 self.jump_vel = 0
             dy += self.jump_vel
 
-
-            
-            
 
             #check colision with flor
             if self.rect.bottom + dy > 300:
