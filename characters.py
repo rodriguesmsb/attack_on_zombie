@@ -27,6 +27,9 @@ class hero(pygame.sprite.Sprite):
         self.jump_vel = 0
         self.in_air = True
         self.gravity = 1
+
+        #attack variable
+        self.attack_on_ground = False
     
 
         #create a blank list to store images
@@ -46,7 +49,7 @@ class hero(pygame.sprite.Sprite):
         
 
         #load all imges for the player
-        animtions_types = ["Idle", "Walk", "Jump"]
+        animtions_types = ["Idle", "Walk", "Jump", "Attack"]
         #path for images
         path = "img/knight/"
         for animation in animtions_types:
@@ -57,7 +60,6 @@ class hero(pygame.sprite.Sprite):
             #count number of files in the folder
             number_of_images = len(gb.glob(path + animation + " *"))
             
-         
 
             for num in range(1,number_of_images + 1):
                 img_path =  "img/knight/" + animation + " (" + str(num) + ").png"
@@ -110,12 +112,14 @@ class hero(pygame.sprite.Sprite):
                 
 
         #check if enough time is passed since last update
-        if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
+        if (pygame.time.get_ticks() - self.update_time) > ANIMATION_COOLDOWN:
             self.update_time = pygame.time.get_ticks()
             self.index += 1
+            print(self.index)
                 
-        if self.index >= len(self.images_right):
+        if self.index >= len(self.images_right[self.action]):
             self.index = 0
+        
     
 
             
@@ -142,11 +146,27 @@ class hero(pygame.sprite.Sprite):
             if self.in_air:
                 self.update_action(2)
                 self.update_animation()
+            if self.attack_on_ground:
+                self.update_action(3)
+                self.update_animation()
         
             
 
             #get key press
             key = pygame.key.get_pressed()
+
+
+
+            #check for attack
+            if key[pygame.K_SPACE] and self.jump == False and self.in_air == False:
+                self.attack_on_ground = True
+            if key[pygame.K_SPACE] == False:
+                self.attack_on_ground = False
+
+                
+                
+
+    
 
 
                 
@@ -170,18 +190,19 @@ class hero(pygame.sprite.Sprite):
                 
             
             #turn on and off jump action
-            if key[pygame.K_SPACE] and self.jump == False and self.in_air == False:
+            if key[pygame.K_w] and self.jump == False and self.in_air == False:
                 self.jump_vel = -11
                 self.jump = True
                 self.in_air = True
             #stopping jum event
-            if key[pygame.K_SPACE] == False:
+            if key[pygame.K_w] == False:
                 self.jump = False
 
             self.jump_vel += self.gravity
             if self.jump_vel > 10:
                 self.jump_vel = 0
             dy += self.jump_vel
+
 
 
             #check colision with flor
