@@ -103,6 +103,7 @@ class hero(pygame.sprite.Sprite):
         #update animation
         #define a timer
         ANIMATION_COOLDOWN = 300
+        print(self.action)
 
         #update image depending on index
         if self.direction == "right":
@@ -115,7 +116,7 @@ class hero(pygame.sprite.Sprite):
         if (pygame.time.get_ticks() - self.update_time) > ANIMATION_COOLDOWN:
             self.update_time = pygame.time.get_ticks()
             self.index += 1
-            print(self.index)
+           
                 
         if self.index >= len(self.images_right[self.action]):
             self.index = 0
@@ -140,15 +141,14 @@ class hero(pygame.sprite.Sprite):
             #select the correct animation
             if self.action == 0:
                 self.update_animation()
+
             if self.action == 1:
                 #Add animation during the move
                 self.update_animation()
-            if self.in_air:
-                self.update_action(2)
-                self.update_animation()
-            if self.attack_on_ground:
-                self.update_action(3)
-                self.update_animation()
+
+         
+
+           
         
             
 
@@ -194,9 +194,12 @@ class hero(pygame.sprite.Sprite):
                 self.jump_vel = -11
                 self.jump = True
                 self.in_air = True
+               
+                
             #stopping jum event
             if key[pygame.K_w] == False:
                 self.jump = False
+              
 
             self.jump_vel += self.gravity
             if self.jump_vel > 10:
