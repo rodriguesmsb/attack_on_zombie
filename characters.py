@@ -103,7 +103,7 @@ class hero(pygame.sprite.Sprite):
         #update animation
         #define a timer
         ANIMATION_COOLDOWN = 300
-        print(self.action)
+        
 
         #update image depending on index
         if self.direction == "right":
@@ -131,6 +131,7 @@ class hero(pygame.sprite.Sprite):
         dy = 0
     
         walk_speed = 5
+        print(self.action)
 
         #draw a rect around char
         pygame.draw.rect(screen, (255,255,0), self.rect, 2)
@@ -145,11 +146,13 @@ class hero(pygame.sprite.Sprite):
             if self.action == 1:
                 #Add animation during the move
                 self.update_animation()
+            if self.action == 2:
+                self.update_animation()
+            if self.action == 3:
+                self.update_animation()
 
          
 
-           
-        
             
 
             #get key press
@@ -162,13 +165,6 @@ class hero(pygame.sprite.Sprite):
                 self.attack_on_ground = True
             if key[pygame.K_SPACE] == False:
                 self.attack_on_ground = False
-
-                
-                
-
-    
-
-
                 
             #Add left move
             if key[pygame.K_LEFT]:
@@ -181,24 +177,31 @@ class hero(pygame.sprite.Sprite):
                 self.direction = "right"
 
 
-            #add code to star animation only if key is pressed
+            #add code to update action according to pressed key
             if key[pygame.K_RIGHT] or key[pygame.K_LEFT]:
                 self.update_action(1)
-                self.counter += 1
+
+            elif key[pygame.K_UP]:
+                self.update_action(2)
+
+            elif key[pygame.K_w]:
+                self.update_action(3)
+
             else:
                 self.update_action(0)
-                
-            
-            #turn on and off jump action
-            if key[pygame.K_w] and self.jump == False and self.in_air == False:
+
+
+            if key[pygame.K_UP] and self.jump == False and self.in_air == False:
                 self.jump_vel = -11
                 self.jump = True
                 self.in_air = True
+                
                
                 
             #stopping jum event
             if key[pygame.K_w] == False:
                 self.jump = False
+                
               
 
             self.jump_vel += self.gravity
