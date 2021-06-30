@@ -98,11 +98,11 @@ class hero(pygame.sprite.Sprite):
             self.index = 0
             self.update_time = pygame.time.get_ticks()
 
-    def update_animation(self):
+    def update_animation(self, time):
 
         #update animation
         #define a timer
-        ANIMATION_COOLDOWN = 300
+        ANIMATION_COOLDOWN = time
         
 
         #update image depending on index
@@ -131,7 +131,7 @@ class hero(pygame.sprite.Sprite):
         dy = 0
     
         walk_speed = 5
-        print(self.action)
+        
 
         #draw a rect around char
         pygame.draw.rect(screen, (255,255,0), self.rect, 2)
@@ -141,16 +141,16 @@ class hero(pygame.sprite.Sprite):
 
             #creating animation according to action (fix speeed animation next)
             if self.action == 0:
-                self.update_animation()
+                self.update_animation(300)
 
             if self.action == 1:
-                self.update_animation()
+                self.update_animation(300)
 
             if self.action == 2:
-                self.update_animation()
+                self.update_animation(10)
 
             if self.action == 3:
-                self.update_animation()
+                self.update_animation(10)
 
          
 
