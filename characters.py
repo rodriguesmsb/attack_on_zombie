@@ -139,15 +139,16 @@ class hero(pygame.sprite.Sprite):
 
         if self.alive:
 
-            #select the correct animation
+            #creating animation according to action (fix speeed animation next)
             if self.action == 0:
                 self.update_animation()
 
             if self.action == 1:
-                #Add animation during the move
                 self.update_animation()
+
             if self.action == 2:
                 self.update_animation()
+
             if self.action == 3:
                 self.update_animation()
 
