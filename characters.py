@@ -147,10 +147,10 @@ class hero(pygame.sprite.Sprite):
                 self.update_animation(300)
 
             if self.action == 2:
-                self.update_animation(10)
+                self.update_animation(100)
 
             if self.action == 3:
-                self.update_animation(10)
+                self.update_animation(100)
 
          
 
