@@ -49,7 +49,7 @@ class hero(pygame.sprite.Sprite):
         
 
         #load all imges for the player
-        animtions_types = ["Idle", "Walk", "Jump", "Attack"]
+        animtions_types = ["Idle", "Walk", "Jump", "Attack", "Dead"]
         #path for images
         path = "img/knight/"
         for animation in animtions_types:
@@ -151,10 +151,8 @@ class hero(pygame.sprite.Sprite):
 
             if self.action == 3:
                 self.update_animation(100)
-
-         
-
-            
+            if self.action == 4:
+                self.update_animation(300) 
 
             #get key press
             key = pygame.key.get_pressed()
