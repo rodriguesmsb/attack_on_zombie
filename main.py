@@ -37,7 +37,7 @@ background = pygame.image.load("img/graveyard/bg.png")
 
 #create characters
 knight = hero(x = 100, y = screen_height - 300, scale = 8)
-zombie = zombie(x = 0, y = screen_height - 300, scale = 6, speed = 1, gender = "M")
+zombie = zombie(x = 100, y = screen_height - 600, scale = 6, speed = 1, gender = "M")
 
 
 def draw_grid():
