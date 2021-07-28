@@ -9,7 +9,8 @@ Created on Thu Apr 15 2021
 ## Import necessary libraries
 import pygame
 from pygame.locals import *
-from characters import hero, zombie
+from characters import hero
+from word_elements import zombie
 from world import World
 
 #initialize pygame
