@@ -65,6 +65,9 @@ class zombie(pygame.sprite.Sprite):
     
     def update_animation(self, screen, screen_width, screen_height):
 
+        #draw a rect around char
+        pygame.draw.rect(screen, (0,200,0), self.rect, 2)
+
         #define a timer
         ANIMATION_COOLDOWN = 100
 
