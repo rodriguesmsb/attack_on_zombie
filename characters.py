@@ -45,6 +45,9 @@ class hero(pygame.sprite.Sprite):
 
         #create a action count
         self.action = 0
+
+        #attack coldow
+        self.attack_cd = 0
     
         
 
@@ -122,10 +125,13 @@ class hero(pygame.sprite.Sprite):
             self.index = 0
         
     
+    def attack(self):
+        if self.attack_cd == 0:
+            self.attack_cd = 5
+            self.update_action(3)
+
 
             
-        
-    
     def update_player_position(self, screen, screen_width, screen_height):
         dx = 0
         dy = 0
@@ -150,7 +156,8 @@ class hero(pygame.sprite.Sprite):
                 self.update_animation(100)
 
             if self.action == 3:
-                self.update_animation(100)
+                self.update_animation(1)
+
             if self.action == 4:
                 self.update_animation 
 
@@ -184,7 +191,8 @@ class hero(pygame.sprite.Sprite):
                 self.update_action(2)
 
             elif key[pygame.K_w]:
-                self.update_action(3)
+                self.attack()
+                
 
             else:
                 self.update_action(0)
